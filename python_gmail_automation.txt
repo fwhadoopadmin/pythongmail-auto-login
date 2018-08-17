@@ -1,0 +1,58 @@
+
+###################################################
+# :python script: Automate_email-login & mailing
+# 		program : python & Linux Administration
+# 		Author: 	fwere
+# 		date :		8/16/2018
+# 		Team: 		Documentum
+###########################################################
+# NOTES 
+#--- SECURITY A must { INPUT SENSITIVE INFORMATION FOR EXAMPLE)
+# --- username = input("Username: ") 
+# ----- passwd = getpass.getpass() & can be further encrypted
+# ---   RECEIVER = input("Receiver_email: ") # protect privacy of others as well  
+#---------------------------------------------------------------------------------------------------
+import smtplib
+import getpass
+import email
+import socket
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+
+username = input("Username: ")  # SAFELY GET USERNAME
+passwd = getpass.getpass()      #SAFELY GET PASSWD
+socket.setdefaulttimeout(10)
+secretpass = getpass.getpass()  #vALIDATE PASSWD
+
+def serverlogin():
+    server = smtplib.SMTP('smtp.gmail.com', '587')
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(username, passwd)       #LOGIN
+
+    if passwd == secretpass:
+        print("Welcome!! Login Successful: \nProceeding to email messaging")
+    else:
+        print("The password you entered is incorrect.")
+
+    RECEIVER = input("Receiver_email: ")
+    SUBJECT = "Official Python Notification"
+    BODY = "\nDear mangidi, \
+                Son long  my friend.Sincerely, ALELO"
+    
+    sendmailStatus = {}      # exit code
+    print("Sending Email to the Receiver: ")
+    
+    server.sendmail(username, RECEIVER, SUBJECT, BODY)
+                
+    if sendmailStatus != {}:
+        print('There was a problem and email was NOT SENT')
+    else:
+        print("Email sent to your recepient Successfully \nCongratulations \
+                     for automating emailing.\nSincerely Mangidi.")
+
+
+if __name__ == '__main__':
+    serverlogin()
